@@ -10,11 +10,12 @@ from app.db.db import get_db
 
 router = APIRouter()
 
-ton_client = TonClient()
+
 
 @router.post("/", response_model=TonRequestHistory)
 async def create_item(body: TonAddressRequest, db: AsyncSession = Depends(get_db)):
     ton_service = TonService(db=db)
+    ton_client = TonClient()
     data_balance = await ton_client.get_tron_address_balance(body.trx)
     data_resources = await ton_client.get_tron_address_resources(body.trx)
     item = TonRequestHistoryModel(trx=data_balance['address'],
